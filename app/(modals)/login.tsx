@@ -48,7 +48,6 @@ export default function Page() {
   };
 
   const submit = async () => {
-    console.log("Email: " + email.current, "Password: " + password.current);
     try {
       if (isSignIn) {
         const { createdSessionId } = await signIn!.create({ identifier: email.current, password: password.current });
@@ -59,14 +58,10 @@ export default function Page() {
           emailAddress: email.current,
           password: password.current,
         });
-        console.log("Email sign sent", email.current, password.current);
-
         
         await signUp!.prepareEmailAddressVerification({
           strategy: "email_code",
         });
-
-        console.log("Email verification sent");
 
         setPendingVerification(true);
       }

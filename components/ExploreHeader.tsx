@@ -2,14 +2,16 @@ import Colors from "@/constants/Colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRef, useState } from "react";
 import {
+  Platform,
   SafeAreaView,
-  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
-import * as Haptics from 'expo-haptics';
+import * as Haptics from "expo-haptics";
 
 const categories = [
   {
@@ -44,7 +46,7 @@ const categories = [
 
 const style = StyleSheet.create({
   safeArea: {
-    flex: 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight! + 5 : 0,
   },
   container: {
     backgroundColor: "#fff",
@@ -89,14 +91,10 @@ const style = StyleSheet.create({
   categories: {
     flex: 1,
     marginTop: 12,
-    paddingHorizontal: 20,
-    paddingBottom: 5,
   },
   categoryItem: {
     alignItems: "center",
     justifyContent: "center",
-    flexGrow: 1,
-    minWidth: 80,
   },
   categoryItemTitle: {
     fontSize: 12,
@@ -146,9 +144,16 @@ const ExploreHeader = ({ onChangeCategory }: ExploreHeaderProps) => {
             horizontal
             ref={scrollRef}
             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              alignItems: "center",
+              gap: 20,
+              paddingHorizontal: 16,
+              flexGrow: 1,
+            }}
           >
             {categories.map((category, index) => (
               <TouchableOpacity
+                ref={(el) => (itemsRef.current[index] = el)}
                 style={[
                   style.categoryItem,
                   { borderBottomWidth: activeIndex === index ? 3 : 0 },
